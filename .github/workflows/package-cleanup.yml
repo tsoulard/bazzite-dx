@@ -1,0 +1,17 @@
+name: Cleanup GHCR packages
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Run weekly on Sundays
+  workflow_dispatch:     # Allow manual triggering
+
+jobs:
+  package-cleanup:
+    name: Delete Old Packages
+    runs-on: ubuntu-24.04
+    steps:
+    - uses: actions/delete-package-versions@v5
+      with: 
+        package-name: 'test-package'
+        package-type: 'container'
+        min-versions-to-keep: 20
