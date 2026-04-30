@@ -1,0 +1,6 @@
+version: "1"
+rules: # Array of rules
+  - base: ublue-main # Required. Target branch
+    upstream: ublue-os:main # Required. Must be in the same fork network.
+    merge-method: merge # Optional, default: merge
+    mergeUnstable: true # Optional, merge pull request even when the mergeable_state is not clean. Default: false

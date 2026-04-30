@@ -6,6 +6,8 @@ on:
     paths-ignore:
       - "**/README.md"
       - "repo_files/**"
+      - "**/pull.yml"
+
   repository_dispatch:
     types: [ "build" ]
   merge_group:
