@@ -8,7 +8,7 @@ on:
 
 jobs:
   package-check:
-    name: Delete Old Packages
+    name: Check if bazzite base has updated
     runs-on: ubuntu-24.04
     steps:
     - name: Get image source version for bazzite
