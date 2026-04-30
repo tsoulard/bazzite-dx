@@ -131,3 +131,30 @@ toggle-gamemode ACTION="":
     fi
 
     echo -e "${green}${bold}Success:${normal} Default session set to $target_pretty. Reboot or log out to apply."
+
+dx-install-flatpaks:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "Installing Flatpaks..."
+    xargs -a <(curl --retry 3 -sL https://raw.githubusercontent.com/tsoulard/bazzite-dx/refs/heads/main/repo_files/flatpaks) flatpak --system -y install
+    echo "Flatpaks installation complete."
+
+dx-install-ohmyzsh:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "Install Fonts for ZSH"
+    wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf -O ~/.local/share/fonts/MesloLGS\ NF\ Bold\ Italic.ttf
+    wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf -O ~/.local/share/fonts/MesloLGS\ NF\ Bold.ttf
+    wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf -O ~/.local/share/fonts/MesloLGS\ NF\ Italic.ttf
+    wget https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf -O ~/.local/share/fonts/MesloLGS\ NF\ Regular.ttf
+
+    mkdir -p ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+
+    echo "Installing Oh My Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    echo "Oh My Zsh installation complete."

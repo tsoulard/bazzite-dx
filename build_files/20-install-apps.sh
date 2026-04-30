@@ -37,12 +37,6 @@ dnf5 --setopt=install_weak_deps=False install -y \
     edk2-ovmf \
     guestfs-tools
 
-# Install extra apps
-dnf5 install -y jstest-gtk ptyxis
-
-# Remove Packages
-dnf5 -y remove lutris
-
 # Restore UUPD update timer and Input Remapper
 sed -i 's@^NoDisplay=true@NoDisplay=false@' /usr/share/applications/input-remapper-gtk.desktop
 systemctl enable input-remapper.service
