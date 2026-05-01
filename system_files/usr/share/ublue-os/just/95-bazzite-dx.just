@@ -131,3 +131,11 @@ toggle-gamemode ACTION="":
     fi
 
     echo -e "${green}${bold}Success:${normal} Default session set to $target_pretty. Reboot or log out to apply."
+
+dx-install-flatpaks:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    echo "Installing Flatpaks..."
+    xargs -a <(curl --retry 3 -sL https://raw.githubusercontent.com/tsoulard/bazzite-dx/refs/heads/main/repo_files/flatpaks) flatpak --system -y install
+    echo "Flatpaks installation complete."
