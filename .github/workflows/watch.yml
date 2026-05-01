@@ -1,0 +1,69 @@
+name: Watch for new base image versions
+
+on:
+  schedule:
+    - cron: '0 5,17 * * *'
+      timezone: "Europe/London"
+  workflow_dispatch:     # Allow manual triggering
+
+jobs:
+  package-check:
+    name: Check if bazzite base has updated
+    runs-on: ubuntu-24.04
+    steps:
+    - name: Get image source version for bazzite
+      id: fetch_source_meta
+      env:
+        org: ublue-os
+        IMAGE_SOURCE_TAG: latest
+        BASE_IMAGE: bazzite
+      run: |
+        set -x
+        # SOURCE_VERSION_MAJOR must be a number
+        declare -i SOURCE_VERSION_MAJOR=0
+
+        # There are some ways to get the major release from an image.
+        # First method: `skopeo inspect` and annotations.
+
+        SOURCE_VERSION=$(
+              skopeo inspect --no-tags --raw --config \
+              "docker://ghcr.io/${org}/${BASE_IMAGE}:${IMAGE_SOURCE_TAG}" | \
+              jq -r '.config.Labels["org.opencontainers.image.version"]'
+        )
+        if [[ -z $SOURCE_VERSION ]]; then
+          echo "::error::$SOURCE_VERSION was not fetched correctly: $SOURCE_VERSION=${$SOURCE_VERSION}"
+          exit 1
+        fi
+        echo "${BASE_IMAGE}_SOURCE_VERSION=$SOURCE_VERSION" >>$GITHUB_OUTPUT
+
+    - name: Get image source version for tsoulard/bazzite-dx
+      id: fetch_current_meta
+      env:
+        org: tsoulard
+        IMAGE_SOURCE_TAG: latest
+        BASE_IMAGE: bazzite-dx
+      run: |
+        set -x
+        # SOURCE_VERSION_MAJOR must be a number
+        declare -i SOURCE_VERSION_MAJOR=0
+
+        # There are some ways to get the major release from an image.
+        # First method: `skopeo inspect` and annotations.
+
+        SOURCE_VERSION=$(
+              skopeo inspect --no-tags --raw --config \
+              "docker://ghcr.io/${org}/${BASE_IMAGE}:${IMAGE_SOURCE_TAG}" | \
+              jq -r '.config.Labels["org.opencontainers.image.version"]'
+        )
+        if [[ -z $SOURCE_VERSION ]]; then
+          echo "::error::$SOURCE_VERSION was not fetched correctly: $SOURCE_VERSION=${$SOURCE_VERSION}"
+          exit 1
+        fi
+        echo "${BASE_IMAGE}_SOURCE_VERSION=$SOURCE_VERSION" >>$GITHUB_OUTPUT
+
+    - name: Kickoff Bazzite-DX
+      if: ${{ env.bazzite_SOURCE_VERSION != env.bazzite-dx_SOURCE_VERSION }}
+      uses: peter-evans/repository-dispatch@v4.0.1
+      continue-on-error: true
+      with:
+        event-type: build
