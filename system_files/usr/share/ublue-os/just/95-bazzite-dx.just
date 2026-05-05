@@ -8,7 +8,7 @@ dx-group:
         local group_name="$1"
         if ! grep -q "^$group_name:" /etc/group; then
             echo "Appending $group_name to /etc/group"
-            grep "^$group_name:" /usr/lib/group | sudo tee -a /etc/group > /dev/null
+            groupadd $group_name
         fi
     }
 
