@@ -85,7 +85,6 @@ jobs:
         id: fetch_source_meta
         env:
           org: ${{ env.SOURCE_ORG }}
-          IMAGE_SOURCE_TAG: ${{ env.IMAGE_SOURCE_TAG || 'latest' }}
         run: |
           set -x
           # SOURCE_VERSION_MAJOR must be a number
@@ -125,7 +124,7 @@ jobs:
       - name: Prepare build args file
         run: |
           cat <<'EOF' >>build_args.txt
-          BASE_IMAGE=ghcr.io/${{ env.SOURCE_ORG }}/${{ matrix.base_image }}:${{ env.IMAGE_SOURCE_TAG || 'latest' }}
+          BASE_IMAGE=ghcr.io/${{ env.SOURCE_ORG }}/${{ env.base_image }}:${{ env.IMAGE_SOURCE_TAG }}
           IMAGE_NAME=${{ env.IMAGE_NAME }}
           IMAGE_VENDOR=${{ github.repository_owner }}
           EOF
