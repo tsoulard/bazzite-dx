@@ -61,6 +61,11 @@ jobs:
         fi
         echo "${BASE_IMAGE}_SOURCE_VERSION=$SOURCE_VERSION" >>$GITHUB_OUTPUT
 
+    - name: Load Values
+      run: |
+        echo ${{ env.bazzite_SOURCE_VERSION }}
+        echo ${{ env.bazzite-dx_SOURCE_VERSION }}
+
     - name: Kickoff Bazzite-DX
       if: ${{ env.bazzite_SOURCE_VERSION != env.bazzite-dx_SOURCE_VERSION }}
       uses: peter-evans/repository-dispatch@v4.0.1
