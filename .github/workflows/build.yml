@@ -46,7 +46,7 @@ jobs:
 
     env:
       BASE_IMAGE: ${{ matrix.base_image }}
-      DEFAULT_TAG: ${{ matrix.base_tag }}
+      IMAGE_SOURCE_TAG: ${{ matrix.base_tag }}
 
     permissions:
       contents: read
