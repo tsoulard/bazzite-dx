@@ -174,7 +174,21 @@ jobs:
           sudo buildah commit --identity-label=false --rm $container raw-img
 
           echo "version=$version" >> "$GITHUB_OUTPUT"
-
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
+          
+          # all of these default to true, but feel free to set to
+          # "false" if necessary for your workflow
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
       # Reprocess raw-img using rechunker which will delete it
       - name: Run Rechunker
         id: rechunk
