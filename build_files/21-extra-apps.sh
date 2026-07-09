@@ -4,7 +4,7 @@
 dnf5 copr enable -y lizardbyte/beta
 
 # Install extra apps
-dnf5 install -y jstest-gtk
+dnf5 install -y jstest-gtk screen
 
 dnf5 install -y Sunshine
 
